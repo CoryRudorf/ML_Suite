@@ -4,7 +4,7 @@ import numpy as np
 import pandas as pd
 import sklearn
 from sklearn.base import BaseEstimator, TransformerMixin
-from sklearn.preprocessing import OneHotEncoder, StandardScaler, CategoricalEncoder
+# from sklearn.preprocessing import OneHotEncoder, StandardScaler, CategoricalEncoder
 from sklearn.pipeline import Pipeline, FeatureUnion
 
 
@@ -19,18 +19,13 @@ class DataFrameSelector(BaseEstimator, TransformerMixin):
         return X[self.attribute_names].values
 
 
-def build_num_pipeline(selector=None, imputer=None,std_scaler=None):
-    steps = []
-    if selector is not None:
-        steps.append(('selector', selector))
-    if imputer is not None:
-        steps.append(('imputer', imputer))
-    if std_scaler is not None:
-        steps.append(('std_scaler', std_scaler))
+def build_pipeline(*transformers):
+    """Pass a tuple of sklearn transformer objects to a sklearn Pipeline object instance. Returns pipeline object."""
+    pipeline = Pipeline([
+        transformers
+    ])
 
-    num_pipeline = Pipeline(steps)
-
-    return num_pipeline
+    return pipeline
 
 
 def predict_regression_model(model, dataset, labels):
